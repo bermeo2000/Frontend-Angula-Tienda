@@ -14,6 +14,7 @@ export class RegistroUsuarioComponent implements OnInit  {
 
   usuarioForm!: FormGroup;
   usuarios: Usuario[] = [];
+  imageBase64: string | ArrayBuffer | null = null;
 
     constructor(
       private fb: FormBuilder, 
@@ -28,7 +29,7 @@ export class RegistroUsuarioComponent implements OnInit  {
         password: ['', [Validators.required]],
         cedula: ['', [Validators.required]],
         telefono: ['', [Validators.required]],
-        imagen: ['', [Validators.required]],
+        imagen: ['',],
         nombreUsuario: ['', [Validators.required]],
       });
     }
@@ -72,6 +73,18 @@ export class RegistroUsuarioComponent implements OnInit  {
         });
       }
     });
+  }
+
+  onFileChange(event: any) {
+    const file = event.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageBase64 = reader.result;
+        this.usuarioForm.controls['imagen'].setValue(this.imageBase64);
+      };
+      reader.readAsDataURL(file); // Convierte el archivo a Base64
+    }
   }
 
 

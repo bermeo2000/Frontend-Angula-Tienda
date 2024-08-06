@@ -9,8 +9,7 @@ import { TipoPesoService } from 'src/app/service/tipo-peso.service';
 import { Router } from '@angular/router';
 import 'jspdf-autotable';
 import { saveAs } from 'file-saver';
-
-
+import { FileSelectEvent } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-producto',
@@ -18,6 +17,9 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./producto.component.css']
 })
 export class ProductoComponent implements OnInit {
+
+
+
 
   formSaveProducto!: FormGroup;
   formUpdateProducto!: FormGroup;
@@ -120,7 +122,7 @@ export class ProductoComponent implements OnInit {
         idTipoPeso: this.formSaveProducto.value.idTipoPeso,
         idCategoriaProducto: this.formSaveProducto.value.idCategoriaProducto,
         idMarca: this.formSaveProducto.value.idMarca,
-        imagen: this.imageBase64 ? this.imageBase64 : '',
+        imagen: this.imageBase64 ? this.imageBase64 : ''
       };
       this.productoService.createProducto(newProducto).subscribe({
         next: (response) => {
@@ -146,26 +148,22 @@ export class ProductoComponent implements OnInit {
     this.visibleSave = true;
   }
 
-  onFileChange(event: any) {
-    const file = event.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imageBase64 = reader.result;
-        this.formSaveProducto.controls['imagen'].setValue(this.imageBase64 as string);
-      };
-      reader.readAsDataURL(file); // Convierte el archivo a Base64
+    onFileChange(event: any) {
+      const file = event.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imageBase64 = reader.result;
+          this.formUpdateProducto.controls['imagen'].setValue(this.imageBase64 as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
-  }
 
   /*  Regresar al home */
-
   navigateToHome() {
     this.router.navigate(['/home']);
   }
-
-
-
 
   /* Eliminar*/
   delete() {
@@ -184,14 +182,11 @@ export class ProductoComponent implements OnInit {
 
   }
 
-
   /* Actualizar */
-
   edit(id: number) {
     this.idForUpdate = id;
     this.prod = this.producto.find(e => e.productoId == id);
     if (this.prod) {
-
       this.formUpdateProducto.controls['nombre'].setValue(this.prod?.nombre)
       this.formUpdateProducto.controls['precio'].setValue(this.prod?.precio)
       this.formUpdateProducto.controls['peso'].setValue(this.prod?.peso)
@@ -216,7 +211,6 @@ export class ProductoComponent implements OnInit {
         idTipoPeso: this.formUpdateProducto.value.idTipoPeso,
         idCategoriaProducto: this.formUpdateProducto.value.idCategoriaProducto,
         idMarca: this.formUpdateProducto.value.idMarca,
-
       };
       this.productoService.updateProducto(updatedProducto).subscribe({
       });
@@ -224,18 +218,15 @@ export class ProductoComponent implements OnInit {
       this.visible = false;
     }
   }
+
   cancel() {
     this.visible = false;
   }
-
-
-
 
   exportPdf() {
     import('jspdf').then((jsPDF) => {
       import('jspdf-autotable').then((x) => {
         const doc = new jsPDF.default('p', 'px', 'a4');
-
 
         // Prepara los datos para la tabla
         const tableData = this.producto.map((item: any) => ({
@@ -248,8 +239,6 @@ export class ProductoComponent implements OnInit {
           idCategoriaProducto: item.idCategoriaProducto?.descripcion || 'N/A', // Manejo de propiedad anidada
           idMarca: item.idMarca?.descripcion || 'N/A'
         }));
-
-        // Generar el PDF
         (doc as any).autoTable({
           columns: this.exportColumns,
           body: tableData
@@ -302,7 +291,5 @@ export class ProductoComponent implements OnInit {
       saveAs(excelBlob, 'productos.xlsx');
     });
   }
-
-
 
 }

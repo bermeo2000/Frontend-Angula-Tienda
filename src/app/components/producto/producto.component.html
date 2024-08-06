@@ -56,7 +56,12 @@
                             <td>{{ producto.descripcion }}</td>
                             <td>{{ producto.idCategoriaProducto?.descripcion }}</td>
                             <td>{{ producto.idMarca?.descripcion }}</td>
-                            <td>{{ producto.imagen }}</td>
+                            <!-- <td>{{ producto.imagen }}</td> -->
+                            <td>
+                                <span class="p-column-title">Representative</span>
+                                <img [alt]="producto.imagen" [src]="producto.imagen" width="70"
+                                    style="vertical-align: middle" />
+                            </td>
 
                             <td>
                                 <button pButton pRipple icon="pi pi-pencil" (click)="edit(producto.productoId)"
@@ -92,12 +97,6 @@
                                     (onSelect)="onFileChange($event)" accept="image/*"></p-fileUpload>
                             </div>
 
-                       <!--      <div>
-                                <p-fileUpload name="file[]" accept="image/*" maxFileSize="">
-
-                                </p-fileUpload>
-                            </div> -->
-
                             <!-- Campo Nombre -->
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
@@ -130,18 +129,6 @@
                                     Campo requerido
                                 </div>
                             </div>
-
-                            <!-- Campo Descripción -->
-                            <div class="mb-3">
-                                <label for="descripcion" class="form-label">Descripción</label>
-                                <textarea formControlName="descripcion" class="form-control" id="descripcion"
-                                    placeholder="Ingrese la descripción del producto"></textarea>
-                                <div class="alert alert-danger" role="alert"
-                                    *ngIf="formSaveProducto.get('descripcion')?.touched && formSaveProducto.get('descripcion')?.errors?.['required']">
-                                    Campo requerido
-                                </div>
-                            </div>
-
 
                             <!-- Selector Tipo de Peso -->
                             <div class="mb-3">
@@ -190,16 +177,16 @@
                             </div>
 
 
-                            <!-- Campo Imagen -->
-                       <!--      <div class="mb-3">
-                                <label for="imagen" class="form-label">Imagen</label>
-                                <input formControlName="imagen" type="text" class="form-control" id="imagen"
-                                    placeholder="Ingrese la URL de la imagen">
+                            <!-- Campo Descripción -->
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea formControlName="descripcion" class="form-control" id="descripcion"
+                                    placeholder="Ingrese la descripción del producto"></textarea>
                                 <div class="alert alert-danger" role="alert"
-                                    *ngIf="formSaveProducto.get('imagen')?.touched && formSaveProducto.get('imagen')?.errors?.['required']">
+                                    *ngIf="formSaveProducto.get('descripcion')?.touched && formSaveProducto.get('descripcion')?.errors?.['required']">
                                     Campo requerido
                                 </div>
-                            </div> -->
+                            </div>
 
                             <p-footer>
                                 <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancelSave()"
@@ -220,6 +207,17 @@
                     styleClass="p-dialog-custom">
                     <ng-template pTemplate="content">
                         <form [formGroup]="formUpdateProducto" class="formulario">
+
+                            <!-- Mostrar la imagen convertida a Base64 si está disponible -->
+                            <div class="mb-3" *ngIf="formUpdateProducto.get('imagen')?.value">
+                                <p-image [src]="formUpdateProducto.get('imagen')?.value" alt="Image preview"
+                                    width="150"></p-image>
+                            </div>
+
+                            <!-- Carga de archivos para actualizar la imagen -->
+                            <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]"
+                                (onSelect)="onFileChange($event)" accept="image/*"></p-fileUpload>
+
 
                             <!-- Campo Nombre -->
                             <div class="mb-3">
@@ -311,7 +309,7 @@
 
 
                             <!-- Campo Imagen -->
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label for="imagen" class="form-label">Imagen</label>
                                 <input formControlName="imagen" type="text" class="form-control" id="imagen"
                                     placeholder="Ingrese la URL de la imagen">
@@ -319,7 +317,7 @@
                                     *ngIf="formUpdateProducto.get('imagen')?.touched && formUpdateProducto.get('imagen')?.errors?.['required']">
                                     Campo requerido
                                 </div>
-                            </div>
+                            </div> -->
 
                             <p-footer>
                                 <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancel()"

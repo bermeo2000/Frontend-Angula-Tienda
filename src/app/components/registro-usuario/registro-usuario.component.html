@@ -1,18 +1,19 @@
 <form [formGroup]="usuarioForm">
     <div class="card-container">
-        <p-card header="Registro" [style]="{width:'500px'}"> 
+        <p-card header="Registro" [style]="{width:'500px'}">
 
-            <div class="field-container">
-                <div class="field">
-                    <label for="imagen" class="form-label small-label">Imagen</label>
-                    <input formControlName="imagen" type="text" class="form-control" id="imagen"
-                        placeholder="Ingrese la URL de la imagen">
-                    <div class="alert alert-danger" role="alert"
-                        *ngIf="usuarioForm.get('imagen')?.touched && usuarioForm.get('imagen')?.errors?.['required']">
-                        Campo requerido
-                    </div>
-                </div>
+            <!-- Contenedor para centrar la imagen -->
+            <div class="p-d-flex p-jc-center p-mb-3">
+                <!-- Mostrar la imagen convertida a Base64 -->
+                <p-image *ngIf="imageBase64" [src]="imageBase64" alt="Image preview" width="120"></p-image>
             </div>
+
+            <!-- Carga de archivos -->
+            <div class="p-d-flex p-jc-center p-mb-3">
+                <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]" (onSelect)="onFileChange($event)"
+                    accept="image/*"></p-fileUpload>
+            </div>
+          
 
             <div class="field-container ">
                 <div class="field ">
@@ -108,8 +109,8 @@
 
             <!-- Botón de Envío -->
             <div class="field mt-3 mb-3">
-                <p-button label="Registrar" styleClass="w-full" [disabled]="usuarioForm.invalid"
-                (click)="registro()" type="submit"></p-button>
+                <p-button label="Registrar" styleClass="w-full" [disabled]="usuarioForm.invalid" (click)="registro()"
+                    type="submit"></p-button>
             </div>
         </p-card>
     </div>

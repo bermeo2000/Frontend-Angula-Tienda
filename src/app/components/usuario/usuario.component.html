@@ -1,88 +1,72 @@
-<div class="dashboard-container">
+<div class="card-container">
+    <main>
+        <header>
+            <p-card header="Usuario" [style]="{width: '500px'}" *ngFor="let usuario of usuarios">
 
-
-    <main class="main-content">
-        <header class="header">
-            <h1>Tu perfil</h1>
-
-            <div *ngFor="let usuario of usuarios">
-
-                <div class="row small-inputt">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="imagen" class="form-label">Imagen</label>
-                            <input type="text" class="form-control" id="imagen" [value]="usuario.imagen" readonly>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="nombreUsuario" class="form-label">Nombre Usuario</label>
-                            <input type="text" class="form-control" id="nombreUsuario" [value]="usuario.nombreUsuario"
-                                readonly>
-                        </div>
-                    </div>
-
-
+                <div class="image-container">
+                    <img [alt]="usuario.imagen" [src]="usuario.imagen" width="70" />
                 </div>
 
-
-                <div class="row small-inputt">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" [value]="usuario.nombre" readonly>
+                <div class="field-container ">
+                    <div class="row small-inputt">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombreUsuario" class="form-label">Nombre Usuario</label>
+                                <input type="text" class="form-control" id="nombre" [value]="usuario.nombreUsuario" readonly>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" class="form-control" id="apellido" [value]="usuario.apellido" readonly>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombreUsuario" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" [value]="usuario.nombre" readonly>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row small-inputt">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="telefono" class="form-label">Teléfono</label>
-                            <input type="tel" class="form-control" id="telefono" [value]="usuario.telefono" readonly>
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="cedula" class="form-label">Cédula</label>
-                            <input type="text" class="form-control" id="cedula" [value]="usuario.cedula" readonly>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="row small-inputt">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" [value]="usuario.email" readonly>
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="password" [value]="usuario.password"
-                                readonly>
+                <div class="field-container ">
+                    <div class="row small-inputt">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="nombreUsuario" class="form-label">Apellido </label>
+                                <input type="text" class="form-control" id="apellido" [value]="usuario.apellido"
+                                    readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="telefono" class="form-label">Teléfono</label>
+                                <input type="tel" class="form-control" id="telefono" [value]="usuario.telefono"
+                                    readonly>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="d-flex justify-content-between mt-3 small-inputt">
-                    <button type="submit" class="btn btn-primary">Cancelar </button>
-                    <button type="submit" class="btn btn-primary">Actualizar</button>
+                <div class="field-container ">
+                    <div class="row small-inputt">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="cedula" class="form-label">Cédula</label>
+                                <input type="text" class="form-control" id="cedula" [value]="usuario.cedula" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" [value]="usuario.email" readonly>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-
-            </div>
+            </p-card>
         </header>
     </main>
 </div>

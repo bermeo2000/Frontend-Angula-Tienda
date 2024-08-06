@@ -6,7 +6,7 @@ export interface Usuario {
     password: string;
     cedula: string;
     telefono: string;
-    imagen: string;
+    imagen: string | ArrayBuffer;
     estado: boolean;
     nombreUsuario: string;
 }
