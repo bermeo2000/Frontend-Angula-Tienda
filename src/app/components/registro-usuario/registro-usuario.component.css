@@ -1,0 +1,55 @@
+.card-container {
+    display: flex;
+    justify-content: center;
+  
+
+}
+
+
+
+.field-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.field {
+    flex: 1;
+}
+
+.col {
+    flex: 1;
+}
+
+.small-label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem; /* Ajusta el valor según el espacio deseado */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

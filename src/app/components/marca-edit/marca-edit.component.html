@@ -1,0 +1,25 @@
+<p-button (click)="showDialog()" icon="pi pi-external-link" label="Show"
+    class="p-button-outlined p-button-success"></p-button>
+
+<p-dialog [(visible)]="visible" [style]="{ width: '450px' }" header="Edita tu Marca" [modal]="true"
+    styleClass="p-dialog-custom">
+    <ng-template pTemplate="content">
+        <div class="field field-name"> <label for="imagen">Imagen</label>
+            <input type="text" pInputText id="imagen" [(ngModel)]="marca.imagen" required autofocus />
+            <small class="p-error" *ngIf="submitted && !marca.imagen">Nombre is required.</small>
+        </div>
+
+        <div class="field field-name"> <label for="descripcion">descripcion</label>
+            <input type="text" pInputText id="descripcion" [(ngModel)]="marca.descripcion" required autofocus />
+            <small class="p-error" *ngIf="submitted && !marca.descripcion">descripcion is required.</small>
+        </div>
+
+    </ng-template>
+
+    <p-footer>
+        <button type="button" pButton label="Save"
+            class="p-button-rounded p-button-success p-button-text-left"></button>
+        <button type="button" pButton label="Cancel" (click)="hideDialog()"
+            class="p-button-rounded p-button-outlined p-button-text-right"></button>
+    </p-footer>
+</p-dialog>

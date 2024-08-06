@@ -1,0 +1,357 @@
+<div>
+    <main>
+        <header>
+
+            <!-- Botón para regresar al home con icono de flecha hacia la izquierda -->
+            <div class="p-mt-4">
+                <button pButton pRipple icon="pi pi-arrow-left" class="p-button-outlined"
+                    (click)="navigateToHome()"></button>
+            </div>
+
+            <p-toolbar>
+                <div class="p-toolbar-group-left">
+                    <p-button type="button" icon="pi pi-plus" class="p-button-text" pTooltip="Agregar un nuevo producto"
+                        (click)="showSaveDialog()"></p-button>
+                </div>
+                <div class="p-toolbar-group-right">
+                    <!-- Contenedor para los botones de exportación alineado a la izquierda -->
+                    <div class="export-buttons">
+                        <button type="button" pButton pRipple icon="pi pi-file" (click)="exportCSV()" class="mr-2"
+                            pTooltip="CSV" tooltipPosition="bottom"></button>
+
+                        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                            class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+
+                        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                            class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                    </div>
+                </div>
+            </p-toolbar>
+
+            <div class="card">
+                <p-table #dt [value]="producto" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+                    [tableStyle]="{ 'min-width': '50rem' }"
+                    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} datos"
+                    [rowsPerPageOptions]="[5, 10, 15]">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width:6%">ID</th>
+                            <th style="width:11%">Nombre</th>
+                            <th style="width:8%">Precio</th>
+                            <th style="width:8%">Peso</th>
+                            <th style="width:12%">Descripción</th>
+                            <th style="width:12%">CategoriaId</th>
+                            <th style="width:12%">MarcaId</th>
+                            <th style="width:20%">Imagen</th>
+                            <th style="width:20%">Acciones</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-producto>
+                        <tr>
+                            <td>{{ producto.productoId }}</td>
+                            <td>{{ producto.nombre }}</td>
+                            <td>{{ producto.precio | currency }}</td>
+                            <td>{{ producto.peso }} {{ producto.idTipoPeso?.tipo }}</td>
+                            <td>{{ producto.descripcion }}</td>
+                            <td>{{ producto.idCategoriaProducto?.descripcion }}</td>
+                            <td>{{ producto.idMarca?.descripcion }}</td>
+                            <td>{{ producto.imagen }}</td>
+
+                            <td>
+                                <button pButton pRipple icon="pi pi-pencil" (click)="edit(producto.productoId)"
+                                    class="p-button-rounded p-button-success mr-2"></button>
+                                <button pButton pRipple icon="pi pi-trash"
+                                    (click)="showModalDelete(producto.productoId)"
+                                    class="p-button-rounded p-button-warning"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                </p-table>
+            </div>
+
+
+            <!-- Guardar -->
+            <div class="card">
+                <p-dialog [(visible)]="visibleSave" [style]="{ width: '450px' }" header="Guardar Nuevo Producto"
+                    [modal]="true" styleClass="p-dialog-custom">
+                    <ng-template pTemplate="content">
+                        <form [formGroup]="formSaveProducto" class="formulario">
+
+                            <!-- Contenedor para centrar la imagen -->
+                            <div class="p-d-flex p-jc-center p-mb-3">
+                                <!-- Mostrar la imagen convertida a Base64 -->
+                                <p-image *ngIf="imageBase64" [src]="imageBase64" alt="Image preview"
+                                    width="120"></p-image>
+                            </div>
+
+                            <!-- Carga de archivos -->
+                            <div class="p-d-flex p-jc-center p-mb-3">
+                                <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]"
+                                    (onSelect)="onFileChange($event)" accept="image/*"></p-fileUpload>
+                            </div>
+
+                       <!--      <div>
+                                <p-fileUpload name="file[]" accept="image/*" maxFileSize="">
+
+                                </p-fileUpload>
+                            </div> -->
+
+                            <!-- Campo Nombre -->
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                                    placeholder="Ingrese el nombre del producto">
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('nombre')?.touched && formSaveProducto.get('nombre')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Campo Precio -->
+                            <div class="mb-3">
+                                <label for="precio" class="form-label">Precio</label>
+                                <input formControlName="precio" type="number" class="form-control" id="precio"
+                                    placeholder="Ingrese el precio del producto">
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('precio')?.touched && formSaveProducto.get('precio')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Campo Peso -->
+                            <div class="mb-3">
+                                <label for="peso" class="form-label">Peso</label>
+                                <input formControlName="peso" type="number" class="form-control" id="peso"
+                                    placeholder="Ingrese el peso del producto">
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('peso')?.touched && formSaveProducto.get('peso')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Campo Descripción -->
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea formControlName="descripcion" class="form-control" id="descripcion"
+                                    placeholder="Ingrese la descripción del producto"></textarea>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('descripcion')?.touched && formSaveProducto.get('descripcion')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+
+                            <!-- Selector Tipo de Peso -->
+                            <div class="mb-3">
+                                <label for="idTipoPeso" class="form-label">Tipo de Peso</label>
+                                <p-dropdown [options]="tipoPesos" formControlName="idTipoPeso" optionLabel="tipo"
+                                    placeholder="Seleccione un tipo de peso" id="idTipoPeso"></p-dropdown>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('idTipoPeso')?.touched && formSaveProducto.get('idTipoPeso')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+
+                            <!-- Selector Categoría de Producto -->
+                            <div class="mb-3">
+                                <label for="idCategoriaProducto" class="form-label">Categoría de Producto</label>
+                                <p-dropdown [options]="categoriaProducto" formControlName="idCategoriaProducto"
+                                    optionLabel="descripcion" placeholder="Seleccione una categoría"
+                                    id="idCategoriaProducto">
+                                </p-dropdown>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('idCategoriaProducto')?.touched && formSaveProducto.get('idCategoriaProducto')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="idMarca" class="form-label">Marca</label>
+                                <p-dropdown [options]="marcas" formControlName="idMarca" optionLabel="descripcion"
+                                    placeholder="Seleccione una marca" id="idMarca">
+                                    <ng-template let-producto pTemplate="producto">
+                                        <div class="p-d-flex p-ai-center">
+                                            <!-- Mostrar la imagen -->
+                                            <img *ngIf="producto.imagen" [src]="producto.imagen" alt="Imagen"
+                                                style="width: 40px; height: 40px; margin-right: 10px;">
+                                            <!-- Mostrar la descripción -->
+                                            <span>{{ producto.descripcion }}</span>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('idMarca')?.touched && formSaveProducto.get('idMarca')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+
+                            <!-- Campo Imagen -->
+                       <!--      <div class="mb-3">
+                                <label for="imagen" class="form-label">Imagen</label>
+                                <input formControlName="imagen" type="text" class="form-control" id="imagen"
+                                    placeholder="Ingrese la URL de la imagen">
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('imagen')?.touched && formSaveProducto.get('imagen')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div> -->
+
+                            <p-footer>
+                                <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancelSave()"
+                                    class="p-button-text"></button>
+                                <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="createProducto()"
+                                    class="p-button-text"></button>
+                            </p-footer>
+                        </form>
+                    </ng-template>
+                </p-dialog>
+            </div>
+
+
+
+            <!-- Editar -->
+            <div class="card">
+                <p-dialog [(visible)]="visible" [style]="{ width: '450px' }" header="Editar Producto" [modal]="true"
+                    styleClass="p-dialog-custom">
+                    <ng-template pTemplate="content">
+                        <form [formGroup]="formUpdateProducto" class="formulario">
+
+                            <!-- Campo Nombre -->
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                                    placeholder="Ingrese el nombre del producto">
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('nombre')?.touched && formUpdateProducto.get('nombre')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Campo Precio -->
+                            <div class="mb-3">
+                                <label for="precio" class="form-label">Precio</label>
+                                <input formControlName="precio" type="number" class="form-control" id="precio"
+                                    placeholder="Ingrese el precio del producto">
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('precio')?.touched && formUpdateProducto.get('precio')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Campo Peso -->
+                            <div class="mb-3">
+                                <label for="peso" class="form-label">Peso</label>
+                                <input formControlName="peso" type="number" class="form-control" id="peso"
+                                    placeholder="Ingrese el peso del producto">
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('peso')?.touched && formUpdateProducto.get('peso')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Campo Descripción -->
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea formControlName="descripcion" class="form-control" id="descripcion"
+                                    placeholder="Ingrese la descripción del producto"></textarea>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('descripcion')?.touched && formUpdateProducto.get('descripcion')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+                            <!-- Selector Tipo de Peso -->
+                            <div class="mb-3">
+                                <label for="idTipoPeso" class="form-label">Tipo de Peso</label>
+                                <p-dropdown [options]="tipoPesos" formControlName="idTipoPeso" optionLabel="tipo"
+                                    placeholder="Seleccione un tipo de peso" id="idTipoPeso"></p-dropdown>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('idTipoPeso')?.touched && formUpdateProducto.get('idTipoPeso')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Selector Categoría de Producto -->
+                            <div class="mb-3">
+                                <label for="idCategoriaProducto" class="form-label">Categoría de Producto</label>
+                                <p-dropdown [options]="categoriaProducto" formControlName="idCategoriaProducto"
+                                    optionLabel="descripcion" placeholder="Seleccione una categoría"
+                                    id="idCategoriaProducto">
+                                </p-dropdown>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('idCategoriaProducto')?.touched && formUpdateProducto.get('idCategoriaProducto')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Selector Marca -->
+                            <div class="mb-3">
+                                <label for="idMarca" class="form-label">Marca</label>
+                                <p-dropdown [options]="marcas" formControlName="idMarca" optionLabel="descripcion"
+                                    placeholder="Seleccione una marca" id="idMarca">
+                                    <ng-template let-producto pTemplate="producto">
+                                        <div class="p-d-flex p-ai-center">
+                                            <!-- Mostrar la imagen -->
+                                            <img *ngIf="producto.imagen" [src]="producto.imagen" alt="Imagen"
+                                                style="width: 40px; height: 40px; margin-right: 10px;">
+                                            <!-- Mostrar la descripción -->
+                                            <span>{{ producto.descripcion }}</span>
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('idMarca')?.touched && formUpdateProducto.get('idMarca')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+
+                            <!-- Campo Imagen -->
+                            <div class="mb-3">
+                                <label for="imagen" class="form-label">Imagen</label>
+                                <input formControlName="imagen" type="text" class="form-control" id="imagen"
+                                    placeholder="Ingrese la URL de la imagen">
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('imagen')?.touched && formUpdateProducto.get('imagen')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <p-footer>
+                                <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancel()"
+                                    class="p-button-text"></button>
+                                <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="update()"
+                                    class="p-button-text"></button>
+                            </p-footer>
+                        </form>
+                    </ng-template>
+                </p-dialog>
+            </div>
+
+
+
+
+            <!-- delete -->
+            <p-dialog [(visible)]="visibleDelete" [style]="{ width: '450px' }" header="Eliminar Marca" [modal]="true"
+                styleClass="p-dialog-custom">
+                <ng-template pTemplate="content">
+                    <div class="p-d-flex p-jc-center">
+                        <i class="pi pi-exclamation-triangle p-mr-2" style="font-size: 2rem; color: #e74c3c;"></i>
+                        <p>¿Estás seguro de que deseas eliminar esta marca?</p>
+                    </div>
+                    <p-footer>
+                        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                            (click)="visibleDelete= false"></button>
+                        <button pButton pRipple label="Eliminar" icon="pi pi-check" class="p-button-text"
+                            (click)="delete()"></button>
+                    </p-footer>
+                </ng-template>
+            </p-dialog>
+
+        </header>
+    </main>
+</div>

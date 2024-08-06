@@ -1,0 +1,152 @@
+<div>
+    <main>
+        <header>
+
+            <div class="card">
+                <p-table #dt [value]="categoriaProducto" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+                    [tableStyle]="{ 'min-width': '50rem' }"
+                    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} datos"
+                    [rowsPerPageOptions]="[5, 10, 15]">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width:6%">ID</th>
+                            <th style="width:12%">Descripción</th>
+                            <th style="width:12%">TiendaId</th>
+                            <th style="width:20%">Acciones</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-producto>
+                        <tr>
+                            <td>{{ producto.categoriaProductoId }}</td>
+                            <td>{{ producto.descripcion }}</td>
+                            <td>{{ producto.idTienda?.nombreTienda }}</td>
+                            <td>
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="edit(producto.categoriaProductoId)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="showModalDelete(producto.categoriaProductoId)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="paginatorleft">
+                        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"
+                            (click)="showSaveDialog()"></p-button>
+                    </ng-template>
+                </p-table>
+            </div>
+
+            <!-- Guardar -->
+            <div class="card">
+                <p-dialog [(visible)]="visibleSave" [style]="{ width: '450px' }" header="Guardar Nuevo Producto"
+                    [modal]="true" styleClass="p-dialog-custom">
+                    <ng-template pTemplate="content">
+                        <form [formGroup]="formSaveProducto" class="formulario">
+
+
+                            <!-- Campo Descripción -->
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea formControlName="descripcion" class="form-control" id="descripcion"
+                                    placeholder="Ingrese la descripción del producto"></textarea>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('descripcion')?.touched && formSaveProducto.get('descripcion')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Selector Tiendas -->
+                            <div class="mb-3">
+                                <label for="idTienda" class="form-label">Tienda</label>
+                                <p-dropdown [options]="tienda" formControlName="idTienda" optionLabel="nombreTienda"
+                                    placeholder="Seleccione una Tienda" id="idTienda">
+                                </p-dropdown>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formSaveProducto.get('idTienda')?.touched && formSaveProducto.get('idTienda')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <p-footer>
+                                <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancelSave()"
+                                    class="p-button-text"></button>
+                                <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="createProducto()"
+                                    class="p-button-text"></button>
+                            </p-footer>
+                        </form>
+                    </ng-template>
+                </p-dialog>
+            </div>
+
+
+
+
+            <!-- Editar -->
+
+            <div class="card">
+                <p-dialog [(visible)]="visible" [style]="{ width: '450px' }" header="Editar Producto" [modal]="true"
+                    styleClass="p-dialog-custom">
+                    <ng-template pTemplate="content">
+                        <form [formGroup]="formUpdateProducto" class="formulario">
+
+                            <!-- Campo Descripción -->
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea formControlName="descripcion" class="form-control" id="descripcion"
+                                    placeholder="Ingrese la descripción del producto"></textarea>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('descripcion')?.touched && formUpdateProducto.get('descripcion')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <!-- Selector Tiendas -->
+                            <div class="mb-3">
+                                <label for="idTienda" class="form-label">Tienda</label>
+                                <p-dropdown [options]="tienda" formControlName="idTienda" optionLabel="nombreTienda"
+                                    placeholder="Seleccione una Tienda" id="idTienda">
+                                </p-dropdown>
+                                <div class="alert alert-danger" role="alert"
+                                    *ngIf="formUpdateProducto.get('idTienda')?.touched && formUpdateProducto.get('idTienda')?.errors?.['required']">
+                                    Campo requerido
+                                </div>
+                            </div>
+
+                            <p-footer>
+                                <button pButton pRipple label="Cancelar" icon="pi pi-times" (click)="cancel()"
+                                    class="p-button-text"></button>
+                                <button pButton pRipple label="Guardar" icon="pi pi-check" (click)="update()"
+                                    class="p-button-text"></button>
+                            </p-footer>
+                        </form>
+                    </ng-template>
+                </p-dialog>
+            </div>
+
+
+
+
+
+
+
+            <!-- delete -->
+            <p-dialog [(visible)]="visibleDelete" [style]="{ width: '450px' }" header="Eliminar Marca" [modal]="true"
+                styleClass="p-dialog-custom">
+                <ng-template pTemplate="content">
+                    <div class="p-d-flex p-jc-center">
+                        <i class="pi pi-exclamation-triangle p-mr-2" style="font-size: 2rem; color: #e74c3c;"></i>
+                        <p>¿Estás seguro de que deseas eliminar esta marca?</p>
+                    </div>
+                    <p-footer>
+                        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                            (click)="visibleDelete= false"></button>
+                        <button pButton pRipple label="Eliminar" icon="pi pi-check" class="p-button-text"
+                            (click)="delete()"></button>
+                    </p-footer>
+                </ng-template>
+            </p-dialog>
+
+        </header>
+    </main>
+</div>

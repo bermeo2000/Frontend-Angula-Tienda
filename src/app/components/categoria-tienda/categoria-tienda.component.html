@@ -1,0 +1,163 @@
+<div>
+    <main>
+        <header>
+
+            <!-- Botón para regresar al home con icono de flecha hacia la izquierda -->
+            <div class="p-mt-4">
+                <button pButton pRipple icon="pi pi-arrow-left" class="p-button-outlined"
+                    (click)="navigateToHome()"></button>
+            </div>
+
+            <p-toolbar>
+                <div class="p-toolbar-group-left">
+                    <p-button type="button" icon="pi pi-plus" class="p-button-text" pTooltip="Agregar nueva categoria tienda" (click)="showSaveDialog()"
+                        ></p-button>
+                </div>
+                <div class="p-toolbar-group-right">
+                    <!-- Contenedor para los botones de exportación alineado a la izquierda -->
+                    <div class="export-buttons">
+                        <button type="button" pButton pRipple icon="pi pi-file" (click)="exportCSV()" class="mr-2"
+                            pTooltip="CSV" tooltipPosition="bottom"></button>
+
+                        <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                            class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+
+                        <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                            class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                    </div>
+                </div>
+            </p-toolbar>
+
+            <div class="card">
+                <p-table #dt [value]="categoriaTienda" [paginator]="true" [rows]="6" [showCurrentPageReport]="true"
+                    [tableStyle]="{ 'min-width': '50rem' }"
+                    currentPageReportTemplate="Muesta {first} a {last} de {totalRecords} datos"
+                    [rowsPerPageOptions]="[6, 12, 18]">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width:25%">Code</th>
+                            <th style="width:25%">Name</th>
+                            <th style="width:25%">Descripcion</th>
+                            <th style="width:25%">Acciones</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-categori>
+                        <tr>
+                            <td>{{ categori.tiendaCategoriaId }}</td>
+                            <td>{{ categori.nombre }}</td>
+                            <td>{{ categori.descripcion }}</td>
+
+                            <td>
+                                <button pButton pRipple icon="pi pi-pencil"
+                                    class="p-button-rounded p-button-success mr-2"
+                                    (click)="edit(categori.tiendaCategoriaId)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                    (click)="showModalDelete(categori.tiendaCategoriaId)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <!--   <ng-template pTemplate="paginatorleft">
+                        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"
+                            (click)="showSaveDialog()"></p-button>
+                    </ng-template> -->
+                </p-table>
+
+            </div>
+
+            <!-- Guardar -->
+            <p-dialog [(visible)]="visibleSave" [style]="{ width: '450px' }" header="Guardar Nueva Categoria tienda"
+                [modal]="true" styleClass="p-dialog-custom">
+                <ng-template pTemplate="content">
+                    <form [formGroup]="formSaveCategoria" class="formulario">
+
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                                placeholder="Ingrese la nombre">
+                            <div class="alert alert-danger" role="alert"
+                                *ngIf="formSaveCategoria.get('nombre')?.touched && formSaveCategoria.get('nombre')?.errors?.['required']">
+                                Campo requerido
+                            </div>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input formControlName="descripcion" type="text" class="form-control" id="descripcion"
+                                placeholder="Ingrese la descripción">
+                            <div class="alert alert-danger" role="alert"
+                                *ngIf="formSaveCategoria.get('descripcion')?.touched && formSaveCategoria.get('descripcion')?.errors?.['required']">
+                                Campo requerido
+                            </div>
+                        </div>
+
+                        <p-footer>
+                            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                                (click)="cancelSave()"></button>
+                            <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"
+                                (click)="createCategoria()"></button>
+                        </p-footer>
+
+                    </form>
+                </ng-template>
+            </p-dialog>
+
+
+            <!-- Editar -->
+            <p-dialog [(visible)]="visible" [style]="{ width: '450px' }" header="Edita tu Categoria Tienda"
+                [modal]="true" styleClass="p-dialog-custom">
+                <ng-template pTemplate="content">
+                    <form [formGroup]="formUpdateCategoria" class="formulario">
+
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                                placeholder="Ingrese la nombre">
+                            <div class="alert alert-danger" role="alert"
+                                *ngIf="formUpdateCategoria.get('nombre')?.touched && formUpdateCategoria.get('nombre')?.errors?.['required']">
+                                Campo requerido
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input formControlName="descripcion" type="text" class="form-control" id="descripcion"
+                                placeholder="Ingrese la descripción">
+                            <div class="alert alert-danger" role="alert"
+                                *ngIf="formUpdateCategoria.get('descripcion')?.touched && formUpdateCategoria.get('descripcion')?.errors?.['required']">
+                                Campo requerido
+                            </div>
+                        </div>
+
+                        <p-footer>
+                            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                                (click)="cancel()"></button>
+                            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                                (click)="update()"></button>
+                        </p-footer>
+
+                    </form>
+                </ng-template>
+            </p-dialog>
+
+            <!-- delete -->
+            <p-dialog [(visible)]="visibleDelete" [style]="{ width: '450px' }" header="Eliminar Categoria Tienda"
+                [modal]="true" styleClass="p-dialog-custom">
+                <ng-template pTemplate="content">
+                    <div class="p-d-flex p-jc-center">
+                        <i class="pi pi-exclamation-triangle p-mr-2" style="font-size: 2rem; color: #e74c3c;"></i>
+                        <p>¿Estás seguro de que deseas eliminar esta Categoria tienda?</p>
+                    </div>
+                    <p-footer>
+                        <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                            (click)="visibleDelete= false"></button>
+                        <button pButton pRipple label="Eliminar" icon="pi pi-check" class="p-button-text"
+                            (click)="delete()"></button>
+                    </p-footer>
+                </ng-template>
+            </p-dialog>
+
+        </header>
+    </main>
+</div>

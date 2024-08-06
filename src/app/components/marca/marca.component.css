@@ -1,0 +1,63 @@
+.field-buttons {
+    display: flex;
+    /* Arrange buttons horizontally */
+    justify-content: flex-end;
+    /* Align buttons to the right */
+    margin-top: 1rem;
+    /* Add space above buttons */
+}
+
+.field-buttons button {
+    margin-right: 0.5rem;
+    /* Add space between buttons */
+}
+
+.p-button-success {
+    background-color: #4CAF50;
+    /* Customize green color */
+}
+
+.p-button-primary {
+    background-color: #007bff;
+    /* Customize blue color */
+}
+
+.p-button-secondary {
+    background-color: #cccccc;
+    /* Customize gray color */
+}
+
+
+
+/* Create a custom class for the field container */
+.field-name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    /* Add some margin for spacing */
+}
+
+.field-name label {
+    flex: 1;
+    /* Allow label to take up available space */
+    font-weight: bold;
+    /* Make the label text bolder */
+}
+
+.field-name input {
+    flex: 2;
+    /* Allow input to take up twice the space as the label */
+    border: 1px solid #ccc;
+    /* Add a thin border */
+    border-radius: 4px;
+    /* Add rounded corners */
+    padding: 5px;
+    /* Add some padding for better readability */
+}
+
+.field-name .p-error {
+    color: red;
+    /* Change error message color for better visibility */
+    font-size: 0.8rem;
+    /* Make error message slightly smaller */
+}

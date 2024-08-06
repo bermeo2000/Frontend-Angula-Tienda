@@ -1,0 +1,165 @@
+<div>
+  <main>
+    <header>
+
+                  <!-- Botón para regresar al home con icono de flecha hacia la izquierda -->
+                  <div class="p-mt-4">
+                    <button pButton pRipple icon="pi pi-arrow-left" class="p-button-outlined"
+                        (click)="navigateToHome()"></button>
+                </div>
+    
+                <p-toolbar>
+                    <div class="p-toolbar-group-left">
+                        <p-button type="button" icon="pi pi-plus" class="p-button-text" pTooltip="Agregar nueva Marcas" (click)="showSaveDialog()"
+                            ></p-button>
+                    </div>
+                    <div class="p-toolbar-group-right">
+                        <!-- Contenedor para los botones de exportación alineado a la izquierda -->
+                        <div class="export-buttons">
+                            <button type="button" pButton pRipple icon="pi pi-file" (click)="exportCSV()" class="mr-2"
+                                pTooltip="CSV" tooltipPosition="bottom"></button>
+    
+                            <button type="button" pButton pRipple icon="pi pi-file-excel" (click)="exportExcel()"
+                                class="p-button-success mr-2" pTooltip="XLS" tooltipPosition="bottom"></button>
+    
+                            <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPdf()"
+                                class="p-button-warning mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+                        </div>
+                    </div>
+                </p-toolbar>
+    
+
+      <div class="card">
+        <p-table #dt [value]="marcas" [paginator]="true" [rows]="5" [showCurrentPageReport]="true"
+          [tableStyle]="{ 'min-width': '50rem' }"
+          currentPageReportTemplate="Muesta {first} a {last} de {totalRecords} datos"
+          [rowsPerPageOptions]="[5, 10, 15]">
+
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width:25%">Code</th>
+              <th style="width:25%">Name</th>
+              <th style="width:25%">Image</th>
+              <th style="width:25%">Acciones</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-marca>
+            <tr>
+              <td>{{ marca.marcaId }}</td>
+              <td>{{ marca.descripcion }}</td>
+              <td>
+                <span class="p-column-title">Representative</span>
+                <img [alt]="marca.imagen" [src]="marca.imagen" width="70" style="vertical-align: middle" />
+              </td>
+              <td>
+                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                  (click)="edit(marca.marcaId)"></button>
+                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                  (click)="showModalDelete(marca.marcaId)"></button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+      </div>
+
+      <!-- Guardar -->
+      <p-dialog [(visible)]="visibleSave" [style]="{ width: '450px' }" header="Guardar Nueva Marca" [modal]="true"
+        styleClass="p-dialog-custom">
+        <ng-template pTemplate="content">
+          <form [formGroup]="formSaveMarcas" class="formulario">
+
+            <!-- Contenedor para centrar la imagen -->
+            <div class="p-d-flex p-jc-center p-mb-3">
+              <!-- Mostrar la imagen convertida a Base64 -->
+              <p-image *ngIf="imageBase64" [src]="imageBase64" alt="Image preview" width="120"></p-image>
+            </div>
+
+            <!-- Carga de archivos -->
+            <div class="p-d-flex p-jc-center p-mb-3">
+              <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]" (onSelect)="onFileChange($event)"
+                accept="image/*"></p-fileUpload>
+            </div>
+
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <input formControlName="descripcion" type="text" class="form-control" id="descripcion"
+                placeholder="Ingrese la descripción">
+              <div class="alert alert-danger" role="alert"
+                *ngIf="formSaveMarcas.get('descripcion')?.touched && formSaveMarcas.get('descripcion')?.errors?.['required']">
+                Campo requerido
+              </div>
+            </div>
+
+            <p-footer>
+              <div class="p-d-flex p-jc-center">
+                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+                  (click)="cancelSave()"></button>
+                <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"
+                  (click)="createMarca()"></button>
+              </div>
+            </p-footer>
+
+          </form>
+        </ng-template>
+      </p-dialog>
+
+
+
+      <!-- Editar -->
+      <p-dialog [(visible)]="visible" [style]="{ width: '450px' }" header="Edita tu Marca" [modal]="true"
+        styleClass="p-dialog-custom">
+        <ng-template pTemplate="content">
+          <form [formGroup]="formUpdateMarcas" class="formulario">
+
+
+
+            <!-- Mostrar la imagen convertida a Base64 si está disponible -->
+            <div class="mb-3" *ngIf="formUpdateMarcas.get('imagen')?.value">
+              <p-image [src]="formUpdateMarcas.get('imagen')?.value" alt="Image preview" width="250"></p-image>
+            </div>
+
+            <!-- Carga de archivos para actualizar la imagen -->
+            <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]" (onSelect)="onFileChange($event)"
+              accept="image/*"></p-fileUpload>
+
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <input formControlName="descripcion" type="text" class="form-control" id="descripcion"
+                placeholder="Ingrese la descripción">
+              <div class="alert alert-danger" role="alert"
+                *ngIf="formUpdateMarcas.get('descripcion')?.touched && formUpdateMarcas.get('descripcion')?.errors?.['required']">
+                Campo requerido
+              </div>
+            </div>
+
+            <p-footer>
+              <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                (click)="cancel()"></button>
+              <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="update()"></button>
+            </p-footer>
+
+          </form>
+        </ng-template>
+      </p-dialog>
+
+      <!-- delete -->
+      <p-dialog [(visible)]="visibleDelete" [style]="{ width: '450px' }" header="Eliminar Marca" [modal]="true"
+        styleClass="p-dialog-custom">
+        <ng-template pTemplate="content">
+          <div class="p-d-flex p-jc-center">
+            <i class="pi pi-exclamation-triangle p-mr-2" style="font-size: 2rem; color: #e74c3c;"></i>
+            <p>¿Estás seguro de que deseas eliminar esta marca?</p>
+          </div>
+          <p-footer>
+            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
+              (click)="visibleDelete= false"></button>
+            <button pButton pRipple label="Eliminar" icon="pi pi-check" class="p-button-text"
+              (click)="delete()"></button>
+          </p-footer>
+        </ng-template>
+      </p-dialog>
+
+    </header>
+  </main>
+</div>

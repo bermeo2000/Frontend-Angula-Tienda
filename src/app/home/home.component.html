@@ -1,0 +1,56 @@
+<form >
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <p-sidebar [(visible)]="sidebarVisible" position="left" [baseZIndex]="10000">
+            <div class="logo-container">
+                <h2>{{ logoTitle }}</h2>
+            </div>
+            <p-menu [model]="menuItems" [popup]="false"></p-menu>
+        </p-sidebar>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <p-toolbar>
+                <div class="p-toolbar-group-left">
+                    <p-button icon="pi pi-menu" (click)="toggleSidebar()" label="Menu"></p-button>
+                </div>
+                <div class="p-toolbar-group-right">
+                    <p-button icon="pi pi-search" class="p-button-text"></p-button>
+                    <p-button icon="pi pi-bell" class="p-button-text"></p-button>
+                </div>
+            </p-toolbar>
+
+            <!-- Card Examples -->
+            <div class="card-container">
+                <p-card header="Welcome" [style]="{width:'100%'}" class="p-shadow-4">
+                    <p>Bienvenido a tu panel de control. Aquí puedes administrar todos los aspectos de la aplicación.</p>
+                </p-card>
+
+                <p-card header="Quick Stats" [style]="{width:'100%'}" class="p-shadow-4">
+                    <div class="grid">
+                        <div class="col-4">
+                            <p-card title="Usuarios" [style]="{height:'100%'}">
+                                <p>125</p>
+                            </p-card>
+                        </div>
+                        <div class="col-4">
+                            <p-card title="Productos" [style]="{height:'100%'}">
+                                <p>350</p>
+                            </p-card>
+                        </div>
+                        <div class="col-4">
+                            <p-card title="Ventas" [style]="{height:'100%'}">
+                                <p>$5,600</p>
+                            </p-card>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+
