@@ -1,13 +1,24 @@
 <form>
     <div class="card-container">
         <p-card header="Login" [style]="{width:'360px'}">
+
+            <div class="field">
+                <label for="nombreUsuario" class="form-label">Correo Nombre de usuario</label>
+                <input formSaveLogen="nombreUsuario" type="nombreUsuario" class="form-control" id="nombreUsuario"
+                    placeholder="Ingrese nombre de usuario">
+                <!--  <div class="alert alert-danger" role="alert"
+                  *ngIf="formSaveMarcas.get('email')?.touched && formSaveMarcas.get('email')?.errors?.['required']">
+                Campo requerido
+                </div> -->
+            </div>
+
             <div class="field">
                 <label for="email" class="form-label">Correo Electrónico</label>
                 <input formSaveLogen="email" type="email" class="form-control" id="email"
                     placeholder="Ingrese su correo electrónico">
                 <!--  <div class="alert alert-danger" role="alert"
                   *ngIf="formSaveMarcas.get('email')?.touched && formSaveMarcas.get('email')?.errors?.['required']">
-                  Campo requerido
+                Campo requerido
                 </div> -->
             </div>
 

@@ -19,10 +19,10 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(`${environment.apiUsuarios}`);
   }
 
-  createUsuario(usuario: Usuario): Observable<Usuario> {
+  createUsuarios(usuario: Usuario): Observable<Usuario> {
     return this.http.post<Usuario>(environment.apiUsuarios, usuario);
   }
-  createUsuarios(usuario: Usuario): Observable<Usuario> {
+  createUsuario(usuario: Usuario): Observable<Usuario> {
     return this.http.post<Usuario>(`${environment.apiUsuarios}/`, usuario);
   }
 

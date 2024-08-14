@@ -1,0 +1,9 @@
+/* styles.css */
+.p-toolbar-group-right a {
+    margin-right: 1em; /* Espacio entre los enlaces */
+  }
+  
+  .p-toolbar-group-right a:last-child {
+    margin-right: 0; /* Eliminar el margen del último enlace */
+  }
+  

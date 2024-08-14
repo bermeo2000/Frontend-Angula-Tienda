@@ -1,0 +1,117 @@
+<form [formGroup]="usuarioForm">
+    <div class="card-container">
+        <p-card header="Registro" [style]="{width:'500px'}">
+
+            <!-- Contenedor para centrar la imagen -->
+            <div class="p-d-flex p-jc-center p-mb-3">
+                <!-- Mostrar la imagen convertida a Base64 -->
+                <p-image *ngIf="imageBase64" [src]="imageBase64" alt="Image preview" width="120"></p-image>
+            </div>
+
+            <!-- Carga de archivos -->
+            <div class="p-d-flex p-jc-center p-mb-3">
+                <p-fileUpload mode="basic" chooseLabel="Choose" name="demo[]" (onSelect)="onFileChange($event)"
+                    accept="image/*"></p-fileUpload>
+            </div>
+          
+
+            <div class="field-container ">
+                <div class="field ">
+                    <label for="nombreUsuario" class="form-label ">Nombre de Usuario</label>
+                    <input formControlName="nombreUsuario" type="text" class="form-control" id="nombreUsuario"
+                        placeholder="Ingrese su nombre de usuario">
+                    <div class="alert alert-danger" role="alert"
+                        *ngIf="usuarioForm.get('nombreUsuario')?.touched && usuarioForm.get('nombreUsuario')?.errors?.['required']">
+                        Campo requerido
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Fila con Campos Nombre y Apellido -->
+            <div class="field-container ">
+                <!-- Campo Nombre -->
+                <div class="field col">
+                    <label for="nombre" class="form-label">Nombre</label>
+                    <input formControlName="nombre" type="text" class="form-control" id="nombre"
+                        placeholder="Ingrese su nombre">
+                    <div class="alert alert-danger" role="alert"
+                        *ngIf="usuarioForm.get('nombre')?.touched && usuarioForm.get('nombre')?.errors?.['required']">
+                        Campo requerido
+                    </div>
+                </div>
+
+                <!-- Campo Apellido -->
+                <div class="field col">
+                    <label for="apellido" class="form-label">Apellido</label>
+                    <input formControlName="apellido" type="text" class="form-control" id="apellido"
+                        placeholder="Ingrese su apellido">
+                    <div class="alert alert-danger" role="alert"
+                        *ngIf="usuarioForm.get('apellido')?.touched && usuarioForm.get('apellido')?.errors?.['required']">
+                        Campo requerido
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fila con Campos Nombre y Apellido -->
+            <div class="field-container">
+                <div class="field col">
+                    <!-- Campo Cédula -->
+                    <div class="field">
+                        <label for="cedula" class="form-label">Cédula</label>
+                        <input formControlName="cedula" type="text" class="form-control" id="cedula"
+                            placeholder="Ingrese su cédula">
+                        <div class="alert alert-danger" role="alert"
+                            *ngIf="usuarioForm.get('cedula')?.touched && usuarioForm.get('cedula')?.errors?.['required']">
+                            Campo requerido
+                        </div>
+                    </div>
+                </div>
+                <div class="field col">
+                    <!-- Campo Teléfono -->
+                    <div class="field">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <input formControlName="telefono" type="text" class="form-control" id="telefono"
+                            placeholder="Ingrese su teléfono">
+                        <div class="alert alert-danger" role="alert"
+                            *ngIf="usuarioForm.get('telefono')?.touched && usuarioForm.get('telefono')?.errors?.['required']">
+                            Campo requerido
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field-container">
+                <div class="field col">
+                    <div class="field">
+                        <label for="email" class="form-label">Correo Electrónico</label>
+                        <input formControlName="email" type="email" class="form-control" id="email"
+                            placeholder="Ingrese su correo electrónico">
+                        <div class="alert alert-danger" role="alert"
+                            *ngIf="usuarioForm.get('email')?.touched && usuarioForm.get('email')?.errors?.['required']">
+                            Campo requerido
+                        </div>
+                    </div>
+                </div>
+                <div class="field col">
+                    <!-- Campo Contraseña -->
+                    <div class="field">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input formControlName="password" type="password" class="form-control" id="password"
+                            placeholder="Ingrese su contraseña">
+                        <div class="alert alert-danger" role="alert"
+                            *ngIf="usuarioForm.get('password')?.touched && usuarioForm.get('password')?.errors?.['required']">
+                            Campo requerido
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón de Envío -->
+            <div class="field mt-3 mb-3">
+                <p-button label="Registrar" styleClass="w-full" [disabled]="usuarioForm.invalid" (click)="registro()"
+                    type="submit"></p-button>
+            </div>
+        </p-card>
+    </div>
+</form>

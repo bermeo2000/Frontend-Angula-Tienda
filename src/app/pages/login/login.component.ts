@@ -12,8 +12,10 @@ import { MessageService } from 'primeng/api';
 })
 export class LoginComponent implements OnInit {
   loginForm = this.fb.group({
+    nombreUsuario: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required]
+
   })
 
   constructor(

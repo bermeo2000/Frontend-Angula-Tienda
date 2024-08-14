@@ -1,0 +1,31 @@
+<!-- app.component.html -->
+<p-toolbar class="custom-toolbar">
+    <div class="p-toolbar-group-left">
+      <a [routerLink]="'/'" mat-icon-button class="example-icon" aria-label="Menu">
+        <i class="pi pi-book"></i>
+        <span class="p-toolbar-label">Menu Tienda</span>
+      </a>
+    </div>
+    
+    <div class="p-toolbar-group-center">
+      <span class="p-toolbar-title">My Application</span>
+    </div>
+  
+    <div class="p-toolbar-group-right">
+        <div class="p-toolbar-group-right">
+            <a *ngIf="!isLoggedIn" [routerLink]="'/login'" class="p-link p-mr-3" aria-label="Iniciar sesión">
+              <span>Iniciar sesión</span>
+            </a>
+            <a *ngIf="!isLoggedIn" [routerLink]="'/signup'" class="p-link" aria-label="Registrar">
+              <span>Registrar</span>
+            </a>
+          </div>
+      <a *ngIf="isLoggedIn" (click)="logout()" mat-icon-button class="example-icon" aria-label="Cerrar sesión">
+        <span>Cerrar sesión</span>
+      </a>
+      <button *ngIf="isLoggedIn && user" mat-button class="user-button" aria-label="Usuario">
+        {{ user.username }}
+      </button>
+    </div>
+  </p-toolbar>
+  
